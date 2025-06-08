@@ -1,0 +1,47 @@
+{
+  "name": "hasdev-api-gateway",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db:gn": "dotenv -- drizzle-kit generate",
+    "echo:db": "echo \"DB_LOCAL_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit)\"",
+    "db:migrate:local": "bun run set:local && wrangler d1 migrations apply --local DB",
+    "db:migrate:prod": "bun run set:prod && dotenv -- drizzle-kit migrate",
+    "db:studio:local": "bun run set:local && bun run drizzle-kit studio --port 3094",
+    "db:studio:prod": "bun run set:prod && bun run drizzle-kit studio --port 3098",
+    "set:local": "cp .env.local .env.vars && cp wrangler.local.jsonc wrangler.jsonc && cp drizzle.config.local.ts drizzle.config.ts",
+    "set:preview": "cp .env.preview .env.vars && cp wrangler.prod.jsonc wrangler.jsonc",
+    "set:prod": "cp drizzle.config.prod.ts drizzle.config.ts && cp wrangler.prod.jsonc wrangler.jsonc",
+    "dev": "bun run set:local && vite",
+    "build": "vite build && vite build --ssr",
+    "preview": "bun run set:preview && wrangler dev --port 5173",
+    "deploy": "bun run set:prod && bun run build && wrangler deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv ./env.d.ts"
+  },
+  "dependencies": {
+    "@hono/swagger-ui": "^0.5.1",
+    "@hono/zod-validator": "^0.7.0",
+    "@tailwindcss/vite": "^4.1.8",
+    "bcrypt-ts": "^7.1.0",
+    "better-sqlite3": "^11.10.0",
+    "dotenv-cli": "^8.0.0",
+    "drizzle-orm": "^0.44.2",
+    "hono": "^4.7.10",
+    "hono-openapi": "^0.4.8",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.8",
+    "zod": "^3.25.56"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.2.3",
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "@vitejs/plugin-react": "^4.4.1",
+    "drizzle-kit": "^0.31.1",
+    "vite": "^6.3.5",
+    "vite-ssr-components": "^0.2.0",
+    "wrangler": "^4.16.0"
+  }
+}
