@@ -34,7 +34,7 @@ export class TodoRepository {
         userId: todoData.userId,
         text: todoData.text,
         isDone: todoData.isDone ? 1 : 0,
-        planDate: todoData.planDate,
+        planDate: todoData.planDate ? new Date(todoData.planDate) : null,
       })
       .returning();
     

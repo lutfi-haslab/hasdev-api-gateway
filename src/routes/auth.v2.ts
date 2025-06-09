@@ -8,6 +8,7 @@ import { users } from '../../configs/db/schema.auth';
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, and } from 'drizzle-orm';
 import { setCookie, getCookie } from 'hono/cookie';
+import { AuthRepository } from '../lib/repositories/v2/auth';
 
 export const authV2 = new Hono<Environment>();
 
@@ -85,25 +86,11 @@ authV2.post('/register',
         }
     }),
     async (c: Context) => {
-        const db = drizzle(c.env.AUTH_DB);
+        const authRepo = new AuthRepository(c.env.AUTH_DB);
         const { email, password, name } = await c.req.json();
-        const password_hash = await hash(password, 10);
-        const id = crypto.randomUUID();
 
         try {
-            const [user] = await db
-                .insert(users)
-                .values({
-                    id,
-                    email,
-                    password: password_hash,
-                    isAdmin: 0,
-                    emailVerified: 0,
-                    profileName: name,
-                    profilePicture: '',
-                })
-                .returning();
-
+            const user = await authRepo.register(email, password, name);
             const jwt = await issueJwt({ sub: user.id }, c.env.JWT_SECRET);
             return c.json({ token: jwt });
         } catch (e) {
@@ -187,13 +174,13 @@ authV2.post('/login',
         ]
     }),
     async (c: Context) => {
-        const db = drizzle(c.env.AUTH_DB);
+        const authRepo = new AuthRepository(c.env.AUTH_DB);
         const { email, password } = await c.req.json();
         const redirect = c.req.query('redirect');
 
-        const [user] = await db.select().from(users).where(eq(users.email, email));
+        const user = await authRepo.login(email, password);
 
-        if (!user || !(await compare(password, user.password))) {
+        if (!user) {
             return c.json({ error: 'Invalid credentials' }, 401);
         }
 
@@ -250,11 +237,11 @@ authV2.get('/profile',
         }
     }),
     async (c: Context) => {
-        const db = drizzle(c.env.AUTH_DB);
+        const authRepo = new AuthRepository(c.env.AUTH_DB);
         const token = getCookie(c, "token") || c.req.header('authorization')?.replace('Bearer ', '');
         if (!token) return c.json({ error: 'Unauthorized' }, 401);
         const payload = await verify(token, c.env.JWT_SECRET);
-        const [user] = await db.select().from(users).where(eq(users.id, payload.sub as string));
+        const user = await authRepo.getUserById(payload.sub as string);
         return c.json({ user });
     }
 );
@@ -370,6 +357,7 @@ authV2.get('/google/callback',
         }
     }),
     async (c: Context) => {
+        const authRepo = new AuthRepository(c.env.AUTH_DB);
         const code = c.req.query('code') as string;
         const redirect = c.req.query('state') ? decodeURIComponent(c.req.query('state')!) : null;
 
@@ -399,7 +387,7 @@ authV2.get('/google/callback',
             headers: { Authorization: `Bearer ${access_token}` },
         }).then(r => r.json());
 
-        const userId = await upsertUser(c, {
+        const userId = await authRepo.upsertUser({
             provider: 'google',
             provider_id: profile.sub,
             email: profile.email,
@@ -497,6 +485,7 @@ authV2.get('/github/callback',
         }
     }),
     async (c: Context) => {
+        const authRepo = new AuthRepository(c.env.AUTH_DB);
         const code = c.req.query('code') as string;
 
         const tokenRes = await fetch(`https://github.com/login/oauth/access_token`, {
@@ -534,7 +523,7 @@ authV2.get('/github/callback',
 
         const primaryEmail = emails.find((e: any) => e.primary)?.email;
 
-        const userId = await upsertUser(c, {
+        const userId = await authRepo.upsertUser({
             provider: 'github',
             provider_id: profile.id.toString(),
             email: primaryEmail ?? '',
@@ -546,41 +535,3 @@ authV2.get('/github/callback',
         return c.json({ token: jwt });
     }
 );
-
-// Helper function remains the same
-async function upsertUser(c: Context, data: {
-    provider: string;
-    provider_id: string;
-    email: string;
-    profileName: string;
-    avatar_url?: string;
-}) {
-    const db = drizzle(c.env.AUTH_DB);
-    const { provider, provider_id, email, profileName, avatar_url } = data;
-
-    const [user] = await db
-        .select({ id: users.id })
-        .from(users)
-        .where(
-            and(
-                eq(users.provider, provider),
-                eq(users.providerId, provider_id)
-            )
-        );
-
-    if (user) return user.id;
-
-    const [userResponse] = await db.insert(users).values({
-        id: crypto.randomUUID(),
-        email,
-        password: '',
-        isAdmin: 0,
-        emailVerified: 0,
-        provider,
-        providerId: provider_id,
-        profileName,
-        avatarUrl: avatar_url,
-    }).returning();
-
-    return userResponse.id;
-}

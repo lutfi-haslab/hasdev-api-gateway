@@ -28,3 +28,21 @@ GET http://localhost:5173/api/auth/v2/profile
 GET http://localhost:5173/api/auth/v2/google?response_type=code&scope=openid+email+profile&access_type=offline&prompt=consent
 
 ### Google Callback
+
+
+### Create Todo
+POST http://localhost:5173/api/todo
+Content-Type: application/json
+
+{
+    "text": "Buy groceries",
+    "userId": "user123",
+    "planDate": "2023-01-01",
+    "isDone": false
+}
+
+### Get Todos
+GET http://localhost:5173/api/todo?userId=user123
+
+### Get Todo
+GET http://localhost:5173/api/todo/23d9ab3e-d82d-4fa8-b732-8a40f0a78980

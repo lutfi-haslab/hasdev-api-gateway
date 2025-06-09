@@ -7,6 +7,7 @@ import authRoutes from './auth'
 import { authV2 } from './auth.v2'
 import userRoutes from './users'
 import toolsRoutes from './tools'
+import todoRoutes from './todo'
 
 const apiRoutes = new Hono<Environment>()
 
@@ -41,7 +42,7 @@ apiRoutes.get(
     ),
     (c) => {
         const { name } = c.req.valid('query')
-        const bindingsEnv = c.env 
+        const bindingsEnv = c.env
         console.log("[LOG] bindingsEnv", bindingsEnv)
         return c.json({ message: `Hello from API${name ? `, ${name}` : ''}` })
     }
@@ -51,6 +52,7 @@ apiRoutes.route('/users', userRoutes)
 apiRoutes.route('/auth', authRoutes)
 apiRoutes.route('/auth/v2', authV2)
 apiRoutes.route('/tools', toolsRoutes)
+apiRoutes.route('/todo', todoRoutes)
 
 
 export default apiRoutes
