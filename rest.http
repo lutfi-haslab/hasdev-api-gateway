@@ -1,0 +1,30 @@
+## Auth V2 
+
+### Register Password
+POST http://localhost:5173/api/auth/v2/register
+Content-Type: application/json
+
+{
+    "email": "test1234@gmail.com",
+    "password": "password",
+    "name": "test"
+}
+
+
+### Login Password
+POST http://localhost:5173/api/auth/v2/login
+Content-Type: application/json
+
+{
+    "email": "test1234@gmail.com",
+    "password": "password"
+}
+
+### Get Profile
+GET http://localhost:5173/api/auth/v2/profile
+
+
+### Google Login
+GET http://localhost:5173/api/auth/v2/google?response_type=code&scope=openid+email+profile&access_type=offline&prompt=consent
+
+### Google Callback

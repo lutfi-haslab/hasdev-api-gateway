@@ -8,6 +8,13 @@
       "when": 1749371912977,
       "tag": "0000_stiff_lifeguard",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1749436612952,
+      "tag": "0001_illegal_shaman",
+      "breakpoints": true
     }
   ]
 }

@@ -18,9 +18,13 @@ export const users = sqliteTable("users", {
   isAdmin: integer("is_admin").default(0).notNull(),
   emailVerified: integer("email_verified").default(0).notNull(),
   profileName: text("profile_name"),
-  profilePicture: text("profile_picture"),
+  profilePicture: text("profile_picture").default(""),
+  provider: text("provider").default(""),
+  providerId: text("provider_id").default(""),
+  avatarUrl: text("avatar_url").default(""),
   createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
 });
+
 
 export const todos = sqliteTable("todos", {
   id: text("id").primaryKey(),

@@ -3,9 +3,9 @@ import { Hono } from 'hono'
 import { describeRoute } from 'hono-openapi'
 import { z } from 'zod'
 import { Environment } from '../../bindings'
-import userRoutes from './users'
-import { env } from 'hono/adapter'
 import authRoutes from './auth'
+import { authV2 } from './auth.v2'
+import userRoutes from './users'
 
 const apiRoutes = new Hono<Environment>()
 
@@ -48,6 +48,7 @@ apiRoutes.get(
 
 apiRoutes.route('/users', userRoutes)
 apiRoutes.route('/auth', authRoutes)
+apiRoutes.route('/auth/v2', authV2)
 
 
 export default apiRoutes
