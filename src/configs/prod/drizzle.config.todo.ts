@@ -3,7 +3,7 @@ import type { Config } from "drizzle-kit";
 
 export default {
   out: "./drizzle/todo",
-  schema: "./configs/db/schema.todo.ts",
+  schema: "./src/configs/db/schema.todo.ts",
   dialect: "sqlite",
   driver: "d1-http",
   dbCredentials: {

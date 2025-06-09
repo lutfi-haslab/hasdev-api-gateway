@@ -46,7 +46,7 @@ app.get("*", async (c, next) => {
           <ViteClient />
           <ReactRefresh />
           <Script src="/src/client/index.tsx" />
-          <Link href="/src/style.css" rel="stylesheet" />
+          <Link href="/src/client/style.css" rel="stylesheet" />
         </head>
         <body>
           <div id="root" />

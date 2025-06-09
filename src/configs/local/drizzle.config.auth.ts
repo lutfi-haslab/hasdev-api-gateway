@@ -1,10 +1,10 @@
 import type { Config } from "drizzle-kit";
 
 export default {
-  out: "./drizzle/todo",
-  schema: "./configs/db/schema.todo.ts",
+  out: "./drizzle/auth",
+  schema: "./src/configs/db/schema.auth.ts",
   dialect: "sqlite",
   dbCredentials: {
-    url: process.env.DB_LOCAL_TODO!, 
+    url: process.env.DB_LOCAL_AUTH!, 
   },
 } satisfies Config;

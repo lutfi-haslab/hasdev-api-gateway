@@ -10,8 +10,8 @@ const commands = {
   },
   
   'gen': () => {
-    execSync('drizzle-kit generate --config=./configs/local/drizzle.config.auth.ts', { stdio: 'inherit' });
-    execSync('drizzle-kit generate --config=./configs/local/drizzle.config.todo.ts', { stdio: 'inherit' });
+    execSync('drizzle-kit generate --config=./src/configs/local/drizzle.config.auth.ts', { stdio: 'inherit' });
+    execSync('drizzle-kit generate --config=./src/configs/local/drizzle.config.todo.ts', { stdio: 'inherit' });
   },
 
   'migrate:auth:local': () => {
@@ -31,18 +31,18 @@ const commands = {
   
   'migrate:prod': () => {
     console.log('Migrating AUTH_DB to production...');
-    execSync('drizzle-kit migrate --config=./configs/prod/drizzle.config.auth.ts', { stdio: 'inherit' });
+    execSync('drizzle-kit migrate --config=./src/configs/prod/drizzle.config.auth.ts', { stdio: 'inherit' });
     console.log('Migrating TODO_DB to production...');
-    execSync('drizzle-kit migrate --config=./configs/prod/drizzle.config.todo.ts', { stdio: 'inherit' });
+    execSync('drizzle-kit migrate --config=./src/configs/prod/drizzle.config.todo.ts', { stdio: 'inherit' });
   },
 
   'studio:local': () => {
-    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./configs/local/drizzle.config.auth.ts', '--port', '3094'], { stdio: 'inherit' });
-    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./configs/local/drizzle.config.todo.ts', '--port', '3095'], { stdio: 'inherit' });
+    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./src/configs/local/drizzle.config.auth.ts', '--port', '3094'], { stdio: 'inherit' });
+    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./src/configs/local/drizzle.config.todo.ts', '--port', '3095'], { stdio: 'inherit' });
   },
   'studio:prod': () => {
-    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./configs/prod/drizzle.config.auth.ts', '--port', '3094'], { stdio: 'inherit' });
-    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./configs/prod/drizzle.config.todo.ts', '--port', '3095'], { stdio: 'inherit' });
+    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./src/configs/prod/drizzle.config.auth.ts', '--port', '3094'], { stdio: 'inherit' });
+    spawn('bun', ['run', 'drizzle-kit', 'studio', '--config=./src/configs/prod/drizzle.config.todo.ts', '--port', '3095'], { stdio: 'inherit' });
   },
 };
 

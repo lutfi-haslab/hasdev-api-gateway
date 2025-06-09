@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
-import { oauthClients } from "../../../../configs/db/schema.auth";
+import { oauthClients } from "../../../configs/db/schema.auth";
 
 export class OAuthClientRepository {
   private db: ReturnType<typeof drizzle>;

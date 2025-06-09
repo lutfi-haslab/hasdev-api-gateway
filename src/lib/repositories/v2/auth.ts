@@ -1,6 +1,6 @@
 import { compare, hash } from "bcrypt-ts";
 import { drizzle } from "drizzle-orm/d1";
-import { users } from "../../../../configs/db/schema.auth";
+import { users } from "../../../configs/db/schema.auth";
 import { eq, and } from "drizzle-orm";
 
 

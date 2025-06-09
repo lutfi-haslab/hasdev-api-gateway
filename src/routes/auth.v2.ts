@@ -4,7 +4,7 @@ import { Context, Hono } from 'hono';
 import { sign, verify } from 'hono/jwt';
 import { JWTPayload } from 'hono/utils/jwt/types';
 import { Environment } from '../../bindings';
-import { users } from '../../configs/db/schema.auth';
+import { users } from '../configs/db/schema.auth';
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, and } from 'drizzle-orm';
 import { setCookie, getCookie } from 'hono/cookie';
