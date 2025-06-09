@@ -1,9 +1,3 @@
-CREATE TABLE `customer` (
-	`customerId` integer PRIMARY KEY NOT NULL,
-	`companyName` text NOT NULL,
-	`contactName` text NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE `oauth_clients` (
 	`id` text PRIMARY KEY NOT NULL,
 	`client_id` text NOT NULL,
@@ -47,17 +41,6 @@ CREATE TABLE `sessions` (
 	`expires_at` integer NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `todos` (
-	`id` text PRIMARY KEY NOT NULL,
-	`user_id` text NOT NULL,
-	`text` text NOT NULL,
-	`is_done` integer DEFAULT 0 NOT NULL,
-	`plan_date` integer,
-	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
-	`updated_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer)),
-	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
 	`email` text NOT NULL,
@@ -65,7 +48,10 @@ CREATE TABLE `users` (
 	`is_admin` integer DEFAULT 0 NOT NULL,
 	`email_verified` integer DEFAULT 0 NOT NULL,
 	`profile_name` text,
-	`profile_picture` text,
+	`profile_picture` text DEFAULT '',
+	`provider` text DEFAULT '',
+	`provider_id` text DEFAULT '',
+	`avatar_url` text DEFAULT '',
 	`created_at` integer DEFAULT (cast((julianday('now') - 2440587.5)*86400000 as integer))
 );
 --> statement-breakpoint

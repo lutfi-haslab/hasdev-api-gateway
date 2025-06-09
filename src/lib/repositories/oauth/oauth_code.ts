@@ -1,7 +1,7 @@
 
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
-import { oauthCodes } from "../../../db/schema";
+import { oauthCodes } from "../../../../configs/db/schema.auth";
 
 export class OAuthCodeRepository {
     private db: ReturnType<typeof drizzle>;

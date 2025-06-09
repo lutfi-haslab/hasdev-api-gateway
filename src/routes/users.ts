@@ -84,7 +84,7 @@ userRoutes.get('/:id',
         }
     }),
     async (c) => {
-        const userRepo = new UserRepository(c.env.DB);
+        const userRepo = new UserRepository(c.env.AUTH_DB);
         const { id } = c.req.param()
         const user = await userRepo.findById(id);
         console.log("[LOG] user", user);

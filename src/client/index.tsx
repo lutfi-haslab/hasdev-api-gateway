@@ -1,12 +1,11 @@
+import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
-  RouterProvider,
-  createHashRouter,
+  RouterProvider
 } from "react-router";
-import ReactDOM from "react-dom/client";
-import Root from "./page/root";
-import AuthPage from "./page/auth";
-import ProfilePage from "./page/profile";
+import AuthPage from "./pages/auth";
+import ProfilePage from "./pages/profile";
+import Root from "./pages/root";
 const router = createBrowserRouter([
   {
     path: "/",

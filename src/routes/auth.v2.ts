@@ -4,7 +4,7 @@ import { Context, Hono } from 'hono';
 import { sign, verify } from 'hono/jwt';
 import { JWTPayload } from 'hono/utils/jwt/types';
 import { Environment } from '../../bindings';
-import { users } from '../db/schema';
+import { users } from '../../configs/db/schema.auth';
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, and } from 'drizzle-orm';
 import { setCookie, getCookie } from 'hono/cookie';
@@ -85,7 +85,7 @@ authV2.post('/register',
         }
     }),
     async (c: Context) => {
-        const db = drizzle(c.env.DB);
+        const db = drizzle(c.env.AUTH_DB);
         const { email, password, name } = await c.req.json();
         const password_hash = await hash(password, 10);
         const id = crypto.randomUUID();
@@ -187,7 +187,7 @@ authV2.post('/login',
         ]
     }),
     async (c: Context) => {
-        const db = drizzle(c.env.DB);
+        const db = drizzle(c.env.AUTH_DB);
         const { email, password } = await c.req.json();
         const redirect = c.req.query('redirect');
 
@@ -250,7 +250,7 @@ authV2.get('/profile',
         }
     }),
     async (c: Context) => {
-        const db = drizzle(c.env.DB);
+        const db = drizzle(c.env.AUTH_DB);
         const token = getCookie(c, "token") || c.req.header('authorization')?.replace('Bearer ', '');
         if (!token) return c.json({ error: 'Unauthorized' }, 401);
         const payload = await verify(token, c.env.JWT_SECRET);
@@ -555,7 +555,7 @@ async function upsertUser(c: Context, data: {
     profileName: string;
     avatar_url?: string;
 }) {
-    const db = drizzle(c.env.DB);
+    const db = drizzle(c.env.AUTH_DB);
     const { provider, provider_id, email, profileName, avatar_url } = data;
 
     const [user] = await db

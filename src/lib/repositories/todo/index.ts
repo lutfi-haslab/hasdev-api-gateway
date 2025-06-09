@@ -1,6 +1,6 @@
 import { asc, count, desc, eq, type InferSelectModel } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
-import { todos } from "../../../db/schema";
+import { todos } from "../../../../configs/db/schema.todo";
 
 export type Todo = InferSelectModel<typeof todos>;
 

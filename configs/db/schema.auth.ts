@@ -1,15 +1,6 @@
 import { relations } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
-
-// === CUSTOMER ===
-export const customerTable = sqliteTable('customer', {
-  customerId: integer('customerId').primaryKey(),
-  companyName: text('companyName').notNull(),
-  contactName: text('contactName').notNull(),
-});
-
-
 // === USER ===
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
@@ -24,35 +15,6 @@ export const users = sqliteTable("users", {
   avatarUrl: text("avatar_url").default(""),
   createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
 });
-
-
-export const todos = sqliteTable("todos", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
-  text: text("text").notNull(),
-  isDone: integer("is_done").default(0).notNull(),
-  planDate: integer("plan_date", { mode: "timestamp" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).defaultNow(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).defaultNow(),
-});
-
-export const todosRelations = relations(todos, ({ one }) => ({
-  user: one(users, {
-    fields: [todos.userId],
-    references: [users.id],
-  }),
-}));
-
-export const usersRelations = relations(users, ({ many }) => ({
-  sessions: many(sessions),
-  oauthClients: many(oauthClients),
-  oauthTokens: many(oauthTokens),
-  oauthCodes: many(oauthCodes),
-  todos: many(todos),
-}));
-
-// === PROFILE is flattened ===
-// profileName, profilePicture
 
 // === SESSION ===
 export const sessions = sqliteTable("sessions", {
@@ -118,5 +80,3 @@ export const oauthCodesRelations = relations(oauthCodes, ({ one }) => ({
   user: one(users, { fields: [oauthCodes.userId], references: [users.id] }),
 }));
 
-// === TODO ===
-// Moved to the top of the file with the other table definitions

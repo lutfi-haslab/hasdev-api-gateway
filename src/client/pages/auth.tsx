@@ -6,7 +6,7 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [redirect] = useState(window.location.host + "/profile");
+  const [redirect] = useState(window.location.origin + "/profile");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 

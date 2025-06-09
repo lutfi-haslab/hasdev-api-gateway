@@ -1,10 +1,10 @@
 import type { Config } from "drizzle-kit";
 
 export default {
-  out: "./drizzle",
-  schema: "./src/db/schema.ts",
+  out: "./drizzle/auth",
+  schema: "./configs/db/schema.auth.ts",
   dialect: "sqlite",
   dbCredentials: {
-    url: process.env.DB_LOCAL_PATH!, 
+    url: process.env.DB_LOCAL_AUTH!, 
   },
 } satisfies Config;

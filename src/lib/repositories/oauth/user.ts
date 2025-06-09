@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/d1";
-import { users, sessions } from "../../../db/schema";
 import { eq } from "drizzle-orm";
+import { sessions, users } from "../../../../configs/db/schema.auth";
 
 export class UserRepository {
     private db: ReturnType<typeof drizzle>;

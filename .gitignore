@@ -24,6 +24,7 @@ node_modules/
 .env.production
 .dev.vars
 .env.local
+env.d.ts
 
 wrangler.jsonc
 wrangler.local.jsonc
@@ -41,3 +42,4 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+env.d.ts
