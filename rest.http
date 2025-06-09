@@ -5,7 +5,7 @@ POST http://localhost:5173/api/auth/v2/register
 Content-Type: application/json
 
 {
-    "email": "test1234@gmail.com",
+    "email": "test222@gmail.com",
     "password": "password",
     "name": "test"
 }
@@ -16,7 +16,7 @@ POST http://localhost:5173/api/auth/v2/login
 Content-Type: application/json
 
 {
-    "email": "test1234@gmail.com",
+    "email": "test222@gmail.com",
     "password": "password"
 }
 
