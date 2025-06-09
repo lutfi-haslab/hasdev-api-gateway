@@ -6,6 +6,7 @@ import { Environment } from '../../bindings'
 import authRoutes from './auth'
 import { authV2 } from './auth.v2'
 import userRoutes from './users'
+import toolsRoutes from './tools'
 
 const apiRoutes = new Hono<Environment>()
 
@@ -49,6 +50,7 @@ apiRoutes.get(
 apiRoutes.route('/users', userRoutes)
 apiRoutes.route('/auth', authRoutes)
 apiRoutes.route('/auth/v2', authV2)
+apiRoutes.route('/tools', toolsRoutes)
 
 
 export default apiRoutes

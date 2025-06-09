@@ -6,7 +6,7 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [redirect] = useState("http://localhost:5173/profile");
+  const [redirect] = useState(window.location.host + "/profile");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -129,14 +129,22 @@ export default function AuthPage() {
             onClick={handleGoogleLogin}
             className="flex items-center justify-center space-x-2 bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-lg transition"
           >
-            <img src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s96-fcrop64=1,00000000ffffffff-rw" className="w-6 h-6" alt="Google" />
+            <img
+              src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s96-fcrop64=1,00000000ffffffff-rw"
+              className="w-6 h-6"
+              alt="Google"
+            />
             <span>Google</span>
           </button>
           <button
             onClick={handleGithubLogin}
             className="flex items-center justify-center space-x-2 bg-gray-700 hover:bg-gray-600 py-2 px-4 rounded-lg transition"
           >
-            <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" className="w-6 h-6" alt="GitHub" />
+            <img
+              src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+              className="w-6 h-6"
+              alt="GitHub"
+            />
             <span>GitHub</span>
           </button>
         </div>
