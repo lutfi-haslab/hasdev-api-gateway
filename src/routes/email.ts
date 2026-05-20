@@ -14,6 +14,7 @@ const sendEmailSchema = z.object({
   html: z.string().optional(),
   fromName: z.string().min(1).optional(),
   fromEmail: z.string().email().optional(),
+  fromMail: z.string().email().optional(),
 }).refine((value) => value.text || value.html, {
   message: 'Either text or html is required',
   path: ['text'],
@@ -37,6 +38,7 @@ emailRoutes.post(
               html: { type: 'string', example: '<b>This is a test email sent via Sumopod SMTP.</b>' },
               fromName: { type: 'string', example: 'Lutfi Ikbal Majid' },
               fromEmail: { type: 'string', example: 'sender@example.com' },
+              fromMail: { type: 'string', example: 'sender@example.com' },
             },
             required: ['to', 'subject'],
           },
@@ -68,7 +70,17 @@ emailRoutes.post(
       })
 
       const fromName = payload.fromName || c.env.SMTP_FROM_NAME || 'Mailer'
-      const fromEmail = payload.fromEmail || c.env.SMTP_FROM_EMAIL || c.env.SMTP_USER
+      const fromEmail = payload.fromEmail || payload.fromMail || c.env.SMTP_FROM_EMAIL || c.env.SMTP_USER
+
+      if (!z.string().email().safeParse(fromEmail).success) {
+        return c.json(
+          {
+            success: false,
+            error: 'Invalid sender email. Provide fromEmail/fromMail or set SMTP_FROM_EMAIL.',
+          },
+          400,
+        )
+      }
 
       const info = await transporter.sendMail({
         from: `"${fromName}" <${fromEmail}>`,
