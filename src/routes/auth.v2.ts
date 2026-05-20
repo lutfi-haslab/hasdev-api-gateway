@@ -1,13 +1,9 @@
-import { describeRoute } from 'hono-openapi';
-import { compare, hash } from 'bcrypt-ts';
 import { Context, Hono } from 'hono';
+import { describeRoute } from 'hono-openapi';
+import { getCookie, setCookie } from 'hono/cookie';
 import { sign, verify } from 'hono/jwt';
 import { JWTPayload } from 'hono/utils/jwt/types';
 import { Environment } from '../../bindings';
-import { users } from '../configs/db/schema.auth';
-import { drizzle } from 'drizzle-orm/d1';
-import { eq, and } from 'drizzle-orm';
-import { setCookie, getCookie } from 'hono/cookie';
 import { AuthRepository } from '../lib/repositories/v2/auth';
 
 export const authV2 = new Hono<Environment>();
@@ -115,12 +111,12 @@ authV2.post('/login',
                             email: {
                                 type: 'string',
                                 format: 'email',
-                                example: 'user@example.com'
+                                example: 'admin@mail.com'
                             },
                             password: {
                                 type: 'string',
                                 format: 'password',
-                                example: 'securePassword123!'
+                                example: 'password'
                             }
                         },
                         required: ['email', 'password']
@@ -169,7 +165,7 @@ authV2.post('/login',
                 in: 'query',
                 description: 'URL to redirect to after successful login',
                 required: false,
-                example: 'https://example.com/dashboard'
+                example: ''
             }
         ]
     }),

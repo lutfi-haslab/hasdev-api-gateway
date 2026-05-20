@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 const { execSync, spawn } = require('child_process');
+const {generateKey} = require('../lib/utils/cryptTool');
 
 const [command, ...args] = process.argv.slice(2);
 
 const commands = {
+  'gen:key': async () => {
+    const key = await generateKey();
+    console.log(key);
+  },
   'echo:db': () => {
     console.log('All .sqlite files:');
     execSync('find . -type f -name "*.sqlite" -print', { stdio: 'inherit' });
@@ -12,6 +17,7 @@ const commands = {
   'gen': () => {
     execSync('drizzle-kit generate --config=./src/configs/local/drizzle.config.auth.ts', { stdio: 'inherit' });
     execSync('drizzle-kit generate --config=./src/configs/local/drizzle.config.todo.ts', { stdio: 'inherit' });
+    execSync('drizzle-kit generate --config=./src/configs/local/drizzle.config.hasnotes.ts', { stdio: 'inherit' });
   },
 
   'migrate:auth:local': () => {
@@ -22,11 +28,17 @@ const commands = {
     execSync('wrangler d1 migrations apply --local TODO_DB', { stdio: 'inherit' });
   },
   
+  'migrate:hasnotes:local': () => {
+    execSync('wrangler d1 migrations apply --local HASNOTES_DB', { stdio: 'inherit' });
+  },
+  
   'migrate:local': () => {
     console.log('Migrating AUTH_DB...');
     execSync('wrangler d1 migrations apply --local AUTH_DB', { stdio: 'inherit' });
     console.log('Migrating TODO_DB...');
     execSync('wrangler d1 migrations apply --local TODO_DB', { stdio: 'inherit' });
+    console.log('Migrating HASNOTE_DB...');
+    execSync('wrangler d1 migrations apply --local HASNOTES_DB', { stdio: 'inherit' });
   },
   
   'migrate:prod': () => {
@@ -34,6 +46,8 @@ const commands = {
     execSync('drizzle-kit migrate --config=./src/configs/prod/drizzle.config.auth.ts', { stdio: 'inherit' });
     console.log('Migrating TODO_DB to production...');
     execSync('drizzle-kit migrate --config=./src/configs/prod/drizzle.config.todo.ts', { stdio: 'inherit' });
+    console.log('Migrating HASNOTES_DB to production...');
+    execSync('drizzle-kit migrate --config=./src/configs/prod/drizzle.config.hasnotes.ts', { stdio: 'inherit' });
   },
 
   'studio:local': () => {

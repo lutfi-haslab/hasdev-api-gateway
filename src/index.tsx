@@ -31,6 +31,7 @@ app.get("*", async (c, next) => {
     path.startsWith("/api") ||
     path === "/openapi" ||
     path === "/swagger" ||
+    path === "/docs" ||
     path.startsWith("/static") || // optional
     path.endsWith(".js") || // optional
     path.endsWith(".css") // optional
@@ -78,5 +79,6 @@ app.get(
 );
 
 app.get("/swagger", swaggerUI({ url: "/openapi" }));
+app.get("/docs", swaggerUI({ url: "/openapi" }));
 
 export default app;

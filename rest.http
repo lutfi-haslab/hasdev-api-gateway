@@ -5,9 +5,9 @@ POST http://localhost:5173/api/auth/v2/register
 Content-Type: application/json
 
 {
-    "email": "test222@gmail.com",
+    "email": "admin@mail.com",
     "password": "password",
-    "name": "test"
+    "name": "Admin User"
 }
 
 
@@ -16,7 +16,7 @@ POST http://localhost:5173/api/auth/v2/login
 Content-Type: application/json
 
 {
-    "email": "test222@gmail.com",
+    "email": "admin@mail.com",
     "password": "password"
 }
 
@@ -46,3 +46,21 @@ GET http://localhost:5173/api/todo?userId=user123
 
 ### Get Todo
 GET http://localhost:5173/api/todo/23d9ab3e-d82d-4fa8-b732-8a40f0a78980
+
+
+### Load Vector
+POST http://localhost:5173/api/ai/test/vector/load
+
+### Search Vector
+POST http://localhost:5173/api/ai/test/vector
+
+### Send Email
+POST http://localhost:5173/api/email/send
+Content-Type: application/json
+
+{
+    "to": "lutfiikbalmajid2@gmail.com",
+    "subject": "Hello from Sumopod",
+    "text": "This is a test email sent via Sumopod SMTP.",
+    "html": "<b>This is a test email sent via Sumopod SMTP.</b>"
+}

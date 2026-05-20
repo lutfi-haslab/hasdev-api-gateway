@@ -8,6 +8,11 @@ import { authV2 } from './auth.v2'
 import userRoutes from './users'
 import toolsRoutes from './tools'
 import todoRoutes from './todo'
+import aiRoutes from './ai'
+import emailRoutes from './email'
+import hasnotesRoutes from './hasnotes'
+import inagovApiRoute from './inagov_api'
+import komunitaskuRoutes from './komunitasku'
 
 const apiRoutes = new Hono<Environment>()
 
@@ -48,12 +53,15 @@ apiRoutes.get(
     }
 )
 
-apiRoutes.route('/users', userRoutes)
 apiRoutes.route('/auth', authRoutes)
 apiRoutes.route('/auth/v2', authV2)
+apiRoutes.route('/users', userRoutes)
 apiRoutes.route('/tools', toolsRoutes)
 apiRoutes.route('/todo', todoRoutes)
-
+apiRoutes.route('/ai', aiRoutes)
+apiRoutes.route('/email', emailRoutes)
+apiRoutes.route('/hasnotes', hasnotesRoutes)
+apiRoutes.route('/inagov', inagovApiRoute)
+apiRoutes.route('/komunitasku', komunitaskuRoutes)
 
 export default apiRoutes
-export type AppType = typeof apiRoutes

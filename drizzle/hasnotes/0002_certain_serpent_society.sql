@@ -1,0 +1,1 @@
+ALTER TABLE `todo_items` ADD `content` text DEFAULT '{}';
