@@ -87,6 +87,20 @@ Once the server is running, access the interactive API documentation at:
 http://localhost:5173/docs
 ```
 
+### Set Cloudflare token
+
+| Token name | Permissions | Resources | Permissions |
+| --- | --- | --- | --- |
+| hasdev api gateway | Edit | Account | AutoRAG |
+|  |  | Account | Workers AI |
+|  |  | Account | Vectorize |
+|  |  | Account | D1 |
+|  |  | Account | Pub/Sub |
+|  |  | Account | Workers R2 Storage |
+|  |  | Account | Workers KV Storage |
+|  |  | Account | Workers Scripts |
+|  | Read | User | User Details |
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) to get started.

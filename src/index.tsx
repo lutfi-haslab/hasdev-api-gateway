@@ -22,7 +22,23 @@ app.use("*", cors());
 // api routes
 app.route("/api", apiRoutes);
 
-app.get("/", async (c) => {
+// Serve the React app for any non-API path
+app.get("*", async (c, next) => {
+  const path = c.req.path;
+
+  // Avoid intercepting API or Swagger routes
+  if (
+    path.startsWith("/api") ||
+    path === "/openapi" ||
+    path === "/swagger" ||
+    path === "/docs" ||
+    path.startsWith("/static") || // optional
+    path.endsWith(".js") || // optional
+    path.endsWith(".css") // optional
+  ) {
+    return next();
+  }
+
   c.header("Content-Type", "text/html");
   return c.body(
     await renderToReadableStream(
@@ -31,7 +47,7 @@ app.get("/", async (c) => {
           <ViteClient />
           <ReactRefresh />
           <Script src="/src/client/index.tsx" />
-          <Link href="/src/style.css" rel="stylesheet" />
+          <Link href="/src/client/style.css" rel="stylesheet" />
         </head>
         <body>
           <div id="root" />
@@ -63,5 +79,6 @@ app.get(
 );
 
 app.get("/swagger", swaggerUI({ url: "/openapi" }));
+app.get("/docs", swaggerUI({ url: "/openapi" }));
 
 export default app;

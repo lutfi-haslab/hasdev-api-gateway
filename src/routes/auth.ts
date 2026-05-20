@@ -101,7 +101,7 @@ authRoutes.post('/register',
         }
     }),
     async (c) => {
-        const userRepo = new UserRepository(c.env.DB);
+        const userRepo = new UserRepository(c.env.AUTH_DB);
         const { email, password, profileName, isAdmin } = await c.req.json()
         const existing = await userRepo.findByEmail(email)
         if (existing) {
@@ -114,108 +114,108 @@ authRoutes.post('/register',
     })
 
 
-    authRoutes.post('/login',
-        describeRoute({
-            description: 'Login user',
-            tags: ['Auth'],
-            requestBody: {
-                required: true,
+authRoutes.post('/login',
+    describeRoute({
+        description: 'Login user',
+        tags: ['Auth'],
+        requestBody: {
+            required: true,
+            content: {
+                'application/json': {
+                    schema: {
+                        type: 'object',
+                        properties: {
+                            email: {
+                                type: 'string',
+                            },
+                            password: {
+                                type: 'string',
+                            },
+                        },
+                        required: ['email', 'password'],
+                    },
+                },
+            },
+        },
+        responses: {
+            200: {
+                description: 'Successful response',
                 content: {
                     'application/json': {
                         schema: {
                             type: 'object',
                             properties: {
-                                email: {
-                                    type: 'string',
+                                user: {
+                                    type: 'object',
+                                    properties: {
+                                        id: {
+                                            type: 'string',
+                                            example: '8adbe59e-1b49de85b2a5',
+                                        },
+                                        email: {
+                                            type: 'string',
+                                            example: 'test@gmail.com',
+                                        },
+                                        password: {
+                                            type: 'string',
+                                            example: '$2b$12$gU94/dWSuKk4rQRpCaInVlkNTG',
+                                        },
+                                        isAdmin: {
+                                            type: 'integer',
+                                            example: 1,
+                                        },
+                                        emailVerified: {
+                                            type: 'integer',
+                                            example: 0,
+                                        },
+                                        profileName: {
+                                            type: 'string',
+                                            example: null,
+                                        },
+                                        profilePicture: {
+                                            type: 'string',
+                                            example: null,
+                                        },
+                                        createdAt: {
+                                            type: 'string',
+                                            example: '+057405-12-01T04:05:10.000Z',
+                                        },
+                                    },
+                                    required: [
+                                        'id',
+                                        'email',
+                                        'password',
+                                        'isAdmin',
+                                        'emailVerified',
+                                        'profileName',
+                                        'profilePicture',
+                                        'createdAt',
+                                    ],
                                 },
-                                password: {
+                                token: {
                                     type: 'string',
+                                    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
                                 },
                             },
-                            required: ['email', 'password'],
-                        },
+                            required: ['user', 'token'],
+                        }
                     },
                 },
             },
-            responses: {
-                200: {
-                    description: 'Successful response',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                type: 'object',
-                                properties: {
-                                    user: {
-                                        type: 'object',
-                                        properties: {
-                                            id: {
-                                                type: 'string',
-                                                example: '8adbe59e-1b49de85b2a5',
-                                            },
-                                            email: {
-                                                type: 'string',
-                                                example: 'test@gmail.com',
-                                            },
-                                            password: {
-                                                type: 'string',
-                                                example: '$2b$12$gU94/dWSuKk4rQRpCaInVlkNTG',
-                                            },
-                                            isAdmin: {
-                                                type: 'integer',
-                                                example: 1,
-                                            },
-                                            emailVerified: {
-                                                type: 'integer',
-                                                example: 0,
-                                            },
-                                            profileName: {
-                                                type: 'string',
-                                                example: null,
-                                            },
-                                            profilePicture: {
-                                                type: 'string',
-                                                example: null,
-                                            },
-                                            createdAt: {
-                                                type: 'string',
-                                                example: '+057405-12-01T04:05:10.000Z',
-                                            },
-                                        },
-                                        required: [
-                                            'id',
-                                            'email',
-                                            'password',
-                                            'isAdmin',
-                                            'emailVerified',
-                                            'profileName',
-                                            'profilePicture',
-                                            'createdAt',
-                                        ],
-                                    },
-                                    token: {
-                                        type: 'string',
-                                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
-                                    },
-                                },
-                                required: ['user', 'token'],
-                            }
-                        },
-                    },
-                },
-            }
-        }),
-        async (c) => {
-            const userRepo = new UserRepository(c.env.DB);
-            const { email, password } = await c.req.json()
-            const user = await userRepo.findByEmail(email)
-            if (!user) {
-                return c.json({ error: 'User not found' }, 404)
-            }
-            const valid = await compare(password, user.password)
-            if (!valid) {
-                return c.json({ error: 'Invalid password' }, 401)
-            }
-            const token = await createSession(c, user.id)
-            return c.json({ user, token })
-        })
-    export default authRoutes
+        }
+    }),
+    async (c) => {
+        const userRepo = new UserRepository(c.env.AUTH_DB);
+        const { email, password } = await c.req.json()
+        const user = await userRepo.findByEmail(email)
+        if (!user) {
+            return c.json({ error: 'User not found' }, 404)
+        }
+        const valid = await compare(password, user.password)
+        if (!valid) {
+            return c.json({ error: 'Invalid password' }, 401)
+        }
+        const token = await createSession(c, user.id)
+        return c.json({ user, token })
+    })
+export default authRoutes

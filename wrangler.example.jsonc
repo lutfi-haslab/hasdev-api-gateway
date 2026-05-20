@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "api-gateway",
   "compatibility_date": "2025-03-20",
+  "compatibility_flags": ["nodejs_compat"],
   "main": "./src/index.tsx",
   "assets": {
     "directory": "dist"
